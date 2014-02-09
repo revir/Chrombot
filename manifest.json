@@ -2,13 +2,13 @@
     "manifest_version": 2,
     "name": "Chrombot",
     "description": "web scrawer",
-    "permissions": ["tabs", "storage", "<all_urls>"],
+    "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
     "background": {
         "persistent": true,
-        "scripts": ["lib/jquery-1.10.2-custom.js", "lib/socket.io.js", "core.js"]
+        "scripts": ["lib/jquery-1.10.2-custom.js", "lib/socket.io.js", "rpc.js",  "chrombot.js", "PagesManager.js", "core.js", "NeteaseMusic-core.js"]
     },
     "content_scripts": [{
-        "js": ["lib/jquery-1.10.2-custom.js", "page.js"],
+        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "page.js", "utils.js", "NeteaseMusic-page.js"],
         "matches": ["<all_urls>"]
     }],
     "options_page":"options.html",

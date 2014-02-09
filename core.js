@@ -1,5 +1,14 @@
-var socket = io.connect('http://localhost: 5000');
-  socket.on('connected', function (data) {
-    console.log('connected');
-    // socket.emit('my other event', { my: 'data' });
+chrome.tabs.onRemoved.addListener(function(tabId, obj){
+    pagesManager.removePage(tabId);
 });
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.type === 'startHtml') {
+            var pageInfo = pagesManager.getPageInfo(sender.tab.id);
+            if(pageInfo){
+                sendResponse(pageInfo);
+            }
+        }
+    }
+);
