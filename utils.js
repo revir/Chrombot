@@ -10,33 +10,9 @@ Utils.sendMsg = function(type, datas, callback){
 };
 
 Utils.putLog = function(text, level, read){
-    return '';
     var logfuns = [console.log, console.info, console.warn, console.error];
-    level = level && (level < 4) || 1;
-    logfuns[level](text);
-};
-
-// 获取函数名称， 如果是匿名函数则获取前 20 个字符;
-Utils.getFunctionName = function(func) {
-    var name = '';
-    var fname = func.toString();
-    if ( typeof func == 'function' || typeof func == 'object' ) {
-        name = fname.match(/function\s*([\w\$]*)\s*\(/);
-        name = name && name[1];
-        name = name || fname.substring(0,100);
-    }
-    return name;
-};
-
-//获取调用该函数时的调用堆栈， 将调用的函数名序列保存到一个字符串中， 一行一个函数名。
-Utils.getTrace = function(){
-    var stack = [];
-    var caller = arguments.callee.caller;
-    while(caller){
-        stack.unshift(Utils.getFunctionName(caller));
-        caller = caller && caller.caller;
-    }
-    return stack.join('\n');
+    level = level && (level < 4) ? level : 1;
+    logfuns[level].call(console, text);
 };
 
 /* Extend function 模拟面向对象的类继承 */
@@ -60,7 +36,6 @@ Utils.getAbsURL = function(url) {
 };
 
 //打印错误信息并关闭页面
-
 Utils.failAndClose = function(text) {
     Utils.putLog(text, 4);
     safesite.finishPage({

@@ -3,23 +3,19 @@
     "name": "Chrombot",
     "description": "web scrawer",
     "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
+    
     "background": {
-        "persistent": true,
-        "scripts": ["lib/jquery-1.10.2-custom.js", "lib/socket.io.js", "rpc.js",  "chrombot.js", "PagesManager.js", "core.js", "NeteaseMusic-core.js"]
+        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "core-config.js", "chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "NeteaseMusic-core.js"]
     },
+    
     "content_scripts": [{
-        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "page.js", "utils.js", "NeteaseMusic-page.js"],
+        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "utils.js", "NeteaseMusic-page.js"],
         "matches": ["<all_urls>"]
     }],
-    "options_page":"options.html",
+    "options_page": "opt-chrombot.html",
 
-    "browser_action": {
-        "default_icon": {
-            "24": "images/chrombot-24.png",
-            "32": "images/chrombot-32.png"
-        }
-    },
     "icons":{
+        "16": "images/chrombot-16.png",
         "48": "images/chrombot-48.png"
     },
     "minimum_chrome_version": "23",

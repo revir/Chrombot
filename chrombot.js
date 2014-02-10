@@ -2,7 +2,7 @@ var chrombot = {};
 
 chrombot.putLog = function(text, level, read){
     var logfuns = [console.log, console.info, console.warn, console.error];
-    level = level && (level < 4) || 1;
+    level = level && (level < 4) ? level : 1;
     logfuns[level].call(console, text);
 };
 
