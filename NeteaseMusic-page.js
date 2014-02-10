@@ -40,7 +40,9 @@ chrombot.startHtml(function(page) {
 
         chrome.runtime.sendMessage({
             type: 'getMp3',
-            savename: author + '-' + name +' _album_'+ albumName
+            savename: author + '-' + name,
+            savedir:'~/Downloads/'+albumName
+
         }, function(response) {
             if (response.failed) {
                 chrombot.putLog('无法下载此首歌曲!', 3);
