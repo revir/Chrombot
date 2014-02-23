@@ -10,8 +10,8 @@ chrombot.startHtml(function(page) {
     //     mode: 'a',
     //     header: '歌曲,作者,专辑,时长\n'
     // });
-
-    var parseSong = function(index, node, onFinish) {
+    //
+    var parseSong = function(index, node, albumName, onFinish) {
         var playBtn = jQuery('.ply', node),
             titleNode = jQuery('.txt', node),
             timeNode = jQuery('.s-fc3', node)[0],
@@ -40,7 +40,9 @@ chrombot.startHtml(function(page) {
 
         chrome.runtime.sendMessage({
             type: 'getMp3',
-            savename: author + '-' + name
+            savename: author + '-' + name,
+            savedir:'~/Downloads/'+albumName
+
         }, function(response) {
             if (response.failed) {
                 chrombot.putLog('无法下载此首歌曲!', 3);
@@ -58,6 +60,19 @@ chrombot.startHtml(function(page) {
             var songList = jQuery('.m-table .ztag', fm);
             chrombot.putLog('共发现 ' + songList.length + ' 首歌曲');
 
+            var albumName = jQuery('title').text();
+            albumName = albumName.substring(0, albumName.lastIndexOf('-'));
+            albumName.trim();
+            chrombot.putLog('找到专辑名:' + albumName);
+            //chrome.runtime.sendMessage({
+                //type: 'getAlbumName_dir',
+                //savename:albumName
+            //}, function(response) {
+                //if (response.failed) {
+                    //chrombot.putLog('无法创建专辑目录');
+                //}
+            //});
+
             //scheduled to request mp3
             var sIndex = 0,
                 interval = 1000;
@@ -67,7 +82,7 @@ chrombot.startHtml(function(page) {
                     // window.close();
                     return;
                 }
-                parseSong(sIndex, songList[sIndex], funcDo);
+                parseSong(sIndex, songList[sIndex], albumName, funcDo);
                 sIndex += 1;
             };
             var id = window.setInterval(funcDo, interval);

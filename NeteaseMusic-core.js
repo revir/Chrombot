@@ -3,9 +3,11 @@ neteaseBot._mp3pool = [];
 neteaseBot.__taskStarted = false;
 
 neteaseBot.downloadMp3 = function(url, name, dir) {
+    chrombot.putLog('==========='+dir);
     chrombot.addFile({
         url: url,
-        savename: name
+        savename: name,
+        savedir:dir
     });
 };
 
