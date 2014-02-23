@@ -15,6 +15,9 @@ chrome.runtime.onMessage.addListener(
       if (pageInfo) {
         sendResponse(pageInfo);
       }
+    } else if(request.type === 'finishHtml') {
+      neteaseBot.taskEnd();
+      pagesManager.finishHtml(sender.tab.id);
     }
   }
 );

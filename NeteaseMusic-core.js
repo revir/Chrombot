@@ -29,23 +29,7 @@ neteaseBot.request_callback = function(detail) {
 
 neteaseBot.taskBegin = function(){
     if (!neteaseBot.__taskStarted) {
-        chrome.webRequest.onBeforeRequest.addListener(function request_callback(detail){
-            if (/.*[.]mp3$/.test(detail.url)) {
-                if (jQuery.grep(neteaseBot._mp3pool, function(e) {
-                    return e.url === detail.url;
-                }).length) {
-                    return;
-                }
-
-                chrombot.putLog('mp3: ' + detail.url, 0);
-                neteaseBot._mp3pool[neteaseBot._mp3pool.length] = {
-                    url: detail.url
-                };
-                return {
-                    cancel: true
-                };
-            }
-        }, {
+        chrome.webRequest.onBeforeRequest.addListener(neteaseBot.request_callback, {
             urls: ["*://*.126.net/*"]
         }, ["blocking"]);
     }

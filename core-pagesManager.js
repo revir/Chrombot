@@ -27,3 +27,7 @@ pagesManager.getPageInfo = function(tabId){
     });
     return data;
 };
+
+pagesManager.finishHtml = function(tabId){
+    
+};

@@ -9,8 +9,11 @@
     },
     
     "content_scripts": [{
-        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "utils.js", "NeteaseMusic-page.js"],
+        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "utils.js" ],
         "matches": ["<all_urls>"]
+    }, {
+        "js": ["NeteaseMusic-page.js"],
+        "matches": ["*://music.163.com/*"]
     }],
     "options_page": "opt-chrombot.html",
 
