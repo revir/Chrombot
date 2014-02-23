@@ -41,7 +41,7 @@ chrombot.startHtml(function(page) {
         chrome.runtime.sendMessage({
             type: 'getMp3',
             savename: author + '-' + name,
-            savedir:'~/Downloads/'+albumName
+            savedir: '~/'+albumName
 
         }, function(response) {
             if (response.failed) {
