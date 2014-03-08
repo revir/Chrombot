@@ -1,4 +1,4 @@
-var chrombot = {};
+var chrombot = chrombot || {};
 
 chrombot.putLog = function(text, level, read){
     var logfuns = [console.log, console.info, console.warn, console.error];
@@ -20,8 +20,4 @@ chrombot.addHtml = function(data){
     } else {
         console.log('[temp] rpc.serverSocket is not ready');
     }
-};
-
-chrombot.startHtml = function(callback){
-    Utils.sendMsg('startHtml', null, callback);
 };

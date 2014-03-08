@@ -5,14 +5,14 @@
     "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
     
     "background": {
-        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "core-config.js", "chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "NeteaseMusic-core.js"]
+        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "core-config.js", "core-chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "core-NeteaseMusic.js"]
     },
     
     "content_scripts": [{
-        "js": ["lib/jquery-1.10.2-custom.js", "chrombot.js", "utils.js" ],
+        "js": ["lib/jquery-1.10.2-custom.js", "page-chrombot.js", "utils.js" ],
         "matches": ["<all_urls>"]
     }, {
-        "js": ["NeteaseMusic-page.js"],
+        "js": ["page-NeteaseMusic.js"],
         "matches": ["*://music.163.com/*"]
     }],
     "options_page": "opt-chrombot.html",
