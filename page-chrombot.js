@@ -14,6 +14,7 @@ chrombot.finishHtml = function(obj){
     Utils.sendMsg('finishHtml', obj);
 };
 
-chrombot.addHtml = function(obj){
-    Utils.sendMsg('addHtml', obj);
+chrombot.addHtml = function(orgPageInfo, newPageInfo){
+    newPageInfo.pageLayer = orgPageInfo.pageLayer + 1;
+    Utils.sendMsg('addHtml', newPageInfo);
 };

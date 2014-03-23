@@ -14,6 +14,9 @@
     }, {
         "js": ["page-NeteaseMusic.js"],
         "matches": ["*://music.163.com/*"]
+    }, {
+        "js": ["page-Mitbbs.js"],
+        "matches": ["*://www.mitbbs.com/*"]
     }],
     "options_page": "opt-chrombot.html",
 

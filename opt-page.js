@@ -14,5 +14,18 @@ $(document).click(function(e){
                 });
             }
         });
+    } else if(target.is('.mitbbs')){
+        bootbox.prompt('URL:', function(result){
+            if(!result)
+                result = 'http://www.mitbbs.com/bbsdoc/Joke.html';
+
+            if(result){
+                utils.putLog('start a new task: '+result);
+                utils.sendMsg('startTask', {
+                    url: result,
+                    taskType: 'mitbbs'
+                });
+            }
+        });
     }
 });

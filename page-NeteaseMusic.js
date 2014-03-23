@@ -1,7 +1,4 @@
 chrombot.startHtml(function(page) {
-    var pageData = page.data && page.data.length ? JSON.parse(page.data) : {};
-    var curLocation = location.href;
-
     chrombot.putLog('page: ' + JSON.stringify(page), 0);
     var frameSelector = '#g_iframe';
 
@@ -51,7 +48,7 @@ chrombot.startHtml(function(page) {
         });
     };
 
-    if (page.pageIndex === 0) { //首页
+    if (page.pageLayer === 0) { //首页
         utils.waitForAjaxInFrame('.m-table .ztag', frameSelector, function(success) {
             if (!success) {
                 alert('首页超时！');

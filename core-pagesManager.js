@@ -19,7 +19,8 @@ pagesManager.removePage = function(tabId){
 
 pagesManager.updatePage = function(data, tabId) {
     if (!data || !data.url) { //delete tab
-        pagesManager.removePage(tabId);
+        if(!data.notClosePage)
+            pagesManager.removePage(tabId);
     } else {
         if (!tabId || !pagesManager.activePages[tabId]) { //create new tab
             pagesManager.addPage(data);
@@ -29,6 +30,8 @@ pagesManager.updatePage = function(data, tabId) {
                 url: data.url
             });
         }
+        // pagesManager.removePage(tabId);
+        // pagesManager.addPage(data);
     }
 };
 

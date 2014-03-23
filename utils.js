@@ -12,6 +12,8 @@ Utils.sendMsg = function(type, datas, callback){
 Utils.putLog = function(text, level, read){
     var logfuns = [console.log, console.info, console.warn, console.error];
     level = level && (level < 4) ? level : 1;
+    if(typeof(text) !== 'string')
+        text = JSON.stringify(text);
     logfuns[level].call(console, text);
 };
 
