@@ -74,18 +74,17 @@ chrombot.startHtml(function(page) {
             //});
 
             //scheduled to request mp3
-            var sIndex = 0,
-                interval = 1000;
+            var sIndex = 0;
             var funcDo = function() {
                 if (sIndex >= songList.length) {
-                    window.clearInterval(id);
-                    // window.close();
+                    chrombot.finishHtml();
                     return;
                 }
                 parseSong(sIndex, songList[sIndex], albumName, funcDo);
                 sIndex += 1;
             };
-            var id = window.setInterval(funcDo, interval);
+
+            funcDo();
         });
     } else
         window.close();

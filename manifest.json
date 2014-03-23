@@ -5,7 +5,7 @@
     "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
     
     "background": {
-        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "core-config.js", "core-chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "core-NeteaseMusic.js"]
+        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "utils.js", "core-config.js", "core-chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "core-Basebot.js", "core-NeteaseMusic.js"]
     },
     
     "content_scripts": [{

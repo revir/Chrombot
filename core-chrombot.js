@@ -21,3 +21,11 @@ chrombot.addHtml = function(data){
         console.log('[temp] rpc.serverSocket is not ready');
     }
 };
+
+chrombot.getNewHtml = function(obj){
+    if(rpc.serverSocket && rpc.serverSocket.socket.connected){
+        rpc.serverSocket.emit('getHtml', obj);
+    } else {
+        console.log('[temp] rpc.serverSocket is not ready');
+    }
+};

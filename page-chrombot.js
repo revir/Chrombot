@@ -9,3 +9,11 @@ chrombot.putLog = function(text, level, read){
 chrombot.startHtml = function(callback){
     Utils.sendMsg('startHtml', null, callback);
 };
+
+chrombot.finishHtml = function(obj){
+    Utils.sendMsg('finishHtml', obj);
+};
+
+chrombot.addHtml = function(obj){
+    Utils.sendMsg('addHtml', obj);
+};

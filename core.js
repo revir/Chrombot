@@ -4,8 +4,13 @@ chrome.tabs.onRemoved.addListener(function(tabId, obj) {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    var bot = null;
     if (request.type === 'startTask') {
-      neteaseBot.taskBegin();
+      if (request.taskType === 'neteaseMusic') {
+        bot = new NeteaseBot(request.taskType);
+      }
+      //[temp]
+      bot.taskBegin();
       pagesManager.addPage({
         url: request.url,
         pageIndex: 0,
@@ -15,9 +20,15 @@ chrome.runtime.onMessage.addListener(
       if (pageInfo) {
         sendResponse(pageInfo);
       }
-    } else if(request.type === 'finishHtml') {
-      neteaseBot.taskEnd();
-      pagesManager.finishHtml(sender.tab.id);
+    } else if (request.type === 'finishHtml') {
+      chrombot.getNewHtml({
+        tabId: sender.tab.id,
+        number: 1
+      });
+    } else if (request.type === 'addHtml') {
+      chrombot.addHtml(request);
+    } else if (request.type === 'endTask') {
+      bot.taskEnd();
     }
   }
 );
