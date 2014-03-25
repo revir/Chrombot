@@ -20,3 +20,7 @@ chrombot.addHtml = function(orgPageInfo, newPageInfo){
     newPageInfo.pageLayer = orgPageInfo.pageLayer + 1;
     Utils.sendMsg('addHtml', newPageInfo);
 };
+
+chrombot.writeJSONs = function(obj){
+    Utils.sendMsg('writeJSONs', obj);
+};
