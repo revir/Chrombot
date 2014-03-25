@@ -2,7 +2,7 @@ chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
     page.options.topicsOnPage = 2;
-    page.options.pagesOnBoard = 2;
+    page.options.pagesOnBoard = 1;
     utils.putLog(page, 0);
 
     var parseTopicsOfBoard = function() {
@@ -52,6 +52,7 @@ chrombot.startHtml(function(page) {
         page.boardPageNumber = 1; // it should be;
         page.pageType = 'board';
     }
+
     if (page.pageType === 'board') {
         parseTopicsOfBoard();
         parseNavOfBoard();

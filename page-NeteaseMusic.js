@@ -83,6 +83,5 @@ chrombot.startHtml(function(page) {
 
             funcDo();
         });
-    } else
-        window.close();
+    }
 });

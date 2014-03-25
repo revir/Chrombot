@@ -1,16 +1,28 @@
 var rpc = rpc || {};
 rpc.onConnected = function(data) {
-    console.log('connected');
+    utils.putLog('connected');
 };
 
-rpc.onNewHtml = function(data){
-    console.log('get one new html: '+data.url);
-    pagesManager.updatePage(data, data['tabId']);
+rpc.onNewHtml = function(data) {
+    chrombot.htmlRequests -= 1;
+    if (!data.htmlInfo) { // no html coming, may means task is finished!
+        utils.putLog('There is not new Html on the back!');
+        if(pagesManager.hasNoActivePages() && chrombot.htmlRequests === 0){
+            utils.putLog('Task finished!');
+            CoreRobot.taskEnd();
+            pagesManager.removeAll();
+            rpc.serverSocket.emit('taskFinished');
+        }
+    } else {
+        if(!data.htmlInfo.url)
+            return false;
+        utils.putLog('get new html: ' + data.htmlInfo.url);
+        pagesManager.updatePage(data.htmlInfo, data.tabId);
+    }
 };
 
-rpc.init = function(){
-    rpc.serverSocket = io.connect(config.serverIp + ':'+config.serverPort + '/super');
+rpc.init = function() {
+    rpc.serverSocket = io.connect(config.serverIp + ':' + config.serverPort + '/super');
     rpc.serverSocket.on('connected', rpc.onConnected);
     rpc.serverSocket.on('html', rpc.onNewHtml);
 };
-

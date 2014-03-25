@@ -4,12 +4,12 @@ chrome.tabs.onRemoved.addListener(function(tabId, obj) {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    var bot = null;
     if (request.type === 'startTask') {
+      window.CoreRobot = new Basebot();
       if (request.taskType === 'neteaseMusic') {
-        bot = new NeteaseBot(request.taskType);
+        CoreRobot = new NeteaseBot(request.taskType);
         //[temp]
-        bot.taskBegin();
+        CoreRobot.taskBegin();
       }
       
       pagesManager.addPage({
@@ -22,6 +22,7 @@ chrome.runtime.onMessage.addListener(
         sendResponse(pageInfo);
       }
     } else if (request.type === 'finishHtml') {
+      pagesManager.deactivePage(sender.tab.id);
       chrombot.getNewHtml({
         tabId: sender.tab.id,
         number: 1,
@@ -30,6 +31,8 @@ chrome.runtime.onMessage.addListener(
     } else if (request.type === 'addHtml') {
       utils.putLog(request);
       chrombot.addHtml(request);
+    } else if (request.type === 'putLog'){
+      utils.putLog(request.text, request.level, request.read);
     }
   }
 );

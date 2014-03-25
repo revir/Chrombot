@@ -1,5 +1,6 @@
 var pagesManager = {};
 pagesManager.activePages = {};
+pagesManager.deactivePages = {};
 pagesManager.addPage = function(data) {
     if (!data.url)
         return false;
@@ -13,28 +14,62 @@ pagesManager.addPage = function(data) {
 pagesManager.removePage = function(tabId){
     if(!tabId)
         return false;
-    delete pagesManager.activePages[tabId];
+    if(pagesManager.activePages.hasOwnProperty(tabId))
+        delete pagesManager.activePages[tabId];
+    else if(pagesManager.deactivePages.hasOwnProperty(tabId))
+        delete pagesManager.deactivePages[tabId];
+    else
+        return false;
+
     chrome.tabs.remove(tabId);
 };
 
+pagesManager.removeAll = function(){
+    for (var tabId in pagesManager.activePages){
+        chrome.tabs.remove(parseInt(tabId, 10));
+    }
+    for (tabId in pagesManager.deactivePages){
+        chrome.tabs.remove(parseInt(tabId, 10));
+    }
+    pagesManager.activePages = {};
+    pagesManager.deactivePages = {};
+};
+
+pagesManager.deactivePage = function(tabId){
+    if(!tabId || ! pagesManager.activePages.hasOwnProperty(tabId))
+        return false;
+    var data = pagesManager.activePages[tabId];
+    pagesManager.deactivePages[tabId] = data;
+
+    delete pagesManager.activePages[tabId];
+};
+
 pagesManager.updatePage = function(data, tabId) {
-    if (!data || !data.url) { //delete tab
-        if(!data.notClosePage)
-            pagesManager.removePage(tabId);
+    if (!tabId) { //create new tab
+        pagesManager.addPage(data);
+    } else if (pagesManager.deactivePages.hasOwnProperty(tabId)){
+        delete pagesManager.deactivePages[tabId];
+        pagesManager.activePages[tabId] = data;
+        chrome.tabs.update(tabId, {
+            url: data.url
+        });
     } else {
-        if (!tabId || !pagesManager.activePages[tabId]) { //create new tab
-            pagesManager.addPage(data);
-        } else { //update tab
-            pagesManager.activePages[tabId] = data;
-            chrome.tabs.update(tabId, {
-                url: data.url
-            });
-        }
-        // pagesManager.removePage(tabId);
-        // pagesManager.addPage(data);
+        Utils.putLog('###UpdatePage error: the updating tabId is not in deactivePages!', 3);
+        return false;
     }
 };
 
 pagesManager.getPageInfo = function(tabId) {
-    return pagesManager.activePages[tabId];
+    if(!tabId)
+        return false;
+    if(pagesManager.activePages.hasOwnProperty(tabId))
+        return pagesManager.activePages[tabId];
+    else if(pagesManager.deactivePages.hasOwnProperty(tabId))
+        return pagesManager.deactivePages[tabId];
+    else
+        return false;
+};
+
+pagesManager.hasNoActivePages = function(){
+    return ! Object.keys(pagesManager.activePages).length;
 };
