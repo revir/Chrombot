@@ -1,8 +1,11 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 8;
-    page.options.pagesOnBoard = 1;
+    page.options.topicsOnPage = 100;
+    page.options.pagesOnBoard = 10;
+    page.options.articlesPerFile = 100;
+    page.options.savedir = '[Mitbbs]';
+
     utils.putLog(page, 0);
 
     if (page.pageLayer === 0) {
@@ -79,10 +82,10 @@ chrombot.startHtml(function(page) {
                 });
             }
             page.articleInfo.content = utils.getElementAttribute(contentSel, null, 0, 'innerText');
-            chrombot.writeJSONs({
-                typeId: 'MITBBS_JOKE',
-                expectName:  page.articleInfo.date+'.txt',
-                data: page.articleInfo
+            Utils.sendMsg('setArticle', {
+                articlesPerFile: page.options.articlesPerFile,
+                savedir: page.options.savedir,
+                articleInfo: page.articleInfo
             });
         };
         

@@ -29,9 +29,9 @@ chrombot.getNewHtml = function(obj){
     }
 };
 
-chrombot.writeJSONs = function(data){
+chrombot.writeJSON = function(obj){
     if(rpc.serverSocket && rpc.serverSocket.socket.connected){
-        rpc.serverSocket.emit('writeJSONs', data);
+        rpc.serverSocket.emit('writeJSON', obj);
     } else {
         console.log('[temp] rpc.serverSocket is not ready');
     }

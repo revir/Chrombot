@@ -8,10 +8,10 @@ chrome.runtime.onMessage.addListener(
       window.CoreRobot = new Basebot();
       if (request.taskType === 'neteaseMusic') {
         CoreRobot = new NeteaseBot(request.taskType);
-        //[temp]
-        CoreRobot.taskBegin();
+      } else if(request.taskType === 'mitbbs'){
+        CoreRobot = new MitbbsBot(request.taskType);
       }
-
+      CoreRobot.taskBegin();
       pagesManager.addPage({
         url: request.url,
         pageLayer: 0
@@ -40,9 +40,6 @@ chrome.runtime.onMessage.addListener(
     } else if (request.type === 'addHtml') {
       utils.putLog(request);
       chrombot.addHtml(request);
-    } else if (request.type === 'writeJSONs') {
-      utils.putLog('writeJSONs...', 0);
-      chrombot.writeJSONs(request);
     } else if (request.type === 'putLog') {
       utils.putLog(request.text, request.level, request.read);
     }
