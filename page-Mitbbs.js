@@ -1,8 +1,8 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 5;
-    page.options.pagesOnBoard = 2;
+    page.options.topicsOnPage = 4;
+    page.options.pagesOnBoard = 18;
     page.options.articlesPerFile = 3;
     page.options.savedir = '[Mitbbs]';
     utils.putLog(page, 0);

@@ -8,10 +8,15 @@ rpc.onNewHtml = function(data) {
     if (!data.htmlInfo) { // no html coming, may means task is finished!
         utils.putLog('There is not new Html on the back!');
         if(pagesManager.hasNoActivePages() && chrombot.htmlRequests === 0){
-            utils.putLog('Task finished!');
-            CoreRobot.taskEnd();
-            pagesManager.removeAll();
-            rpc.serverSocket.emit('taskFinished');
+            chrombot.finshTask();
+        } else {
+            utils.delayedExecute(1000, function(){
+                chrombot.getNewHtml({
+                  tabId: data.tabId,
+                  number: 1,
+                  notClosePage: data.notClosePage
+                });
+            });
         }
     } else {
         if(!data.htmlInfo.url)

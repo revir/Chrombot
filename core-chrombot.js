@@ -29,6 +29,18 @@ chrombot.getNewHtml = function(obj){
     }
 };
 
+chrombot.taskFinished = false;
+chrombot.finshTask = function(){
+    if(!chrombot.taskFinished){
+        chrombot.taskFinished = true;
+        utils.putLog('Task finished!');
+        
+        CoreRobot.taskEnd();
+        pagesManager.removeAll();
+        rpc.serverSocket.emit('taskFinished');
+    }
+};
+
 chrombot.writeJSON = function(obj){
     if(rpc.serverSocket && rpc.serverSocket.socket.connected){
         rpc.serverSocket.emit('writeJSON', obj);
