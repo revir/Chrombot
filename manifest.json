@@ -3,13 +3,13 @@
     "name": "Chrombot",
     "description": "web scrawer",
     "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
-    
+
     "background": {
-        "scripts": [ "lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "utils.js", "core-config.js", "core-chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "core-Basebot.js", "core-NeteaseMusic.js"]
+        "scripts": ["lib/socket.io.js", "lib/jquery-1.10.2-custom.js", "utils.js", "core-config.js", "core-chrombot.js", "core-rpc.js", "core-pagesManager.js", "core.js", "core-Basebot.js", "core-NeteaseMusic.js", "core-Mitbbs.js"]
     },
-    
+
     "content_scripts": [{
-        "js": ["lib/jquery-1.10.2-custom.js", "page-chrombot.js", "utils.js" ],
+        "js": ["lib/jquery-1.10.2-custom.js", "page-chrombot.js", "utils.js"],
         "matches": ["<all_urls>"]
     }, {
         "js": ["page-NeteaseMusic.js"],
@@ -20,11 +20,11 @@
     }],
     "options_page": "opt-chrombot.html",
 
-    "icons":{
+    "icons": {
         "16": "images/chrombot-16.png",
         "48": "images/chrombot-48.png"
     },
     "minimum_chrome_version": "23",
     "version": "1.0",
-    "update_url":"http://client2.google.com/service/update2/crx"
+    "update_url": "http://client2.google.com/service/update2/crx"
 }

@@ -1,11 +1,10 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 100;
-    page.options.pagesOnBoard = 10;
-    page.options.articlesPerFile = 100;
+    page.options.topicsOnPage = 5;
+    page.options.pagesOnBoard = 2;
+    page.options.articlesPerFile = 3;
     page.options.savedir = '[Mitbbs]';
-
     utils.putLog(page, 0);
 
     if (page.pageLayer === 0) {
