@@ -1,7 +1,7 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 2;
+    page.options.topicsOnPage = 8;
     page.options.pagesOnBoard = 1;
     utils.putLog(page, 0);
 

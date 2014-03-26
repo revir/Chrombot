@@ -70,6 +70,10 @@ pagesManager.getPageInfo = function(tabId) {
         return false;
 };
 
+pagesManager.getPagesCount = function(){
+    return Object.keys(pagesManager.activePages).length + Object.keys(pagesManager.deactivePages).length;
+};
+
 pagesManager.hasNoActivePages = function(){
     return ! Object.keys(pagesManager.activePages).length;
 };

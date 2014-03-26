@@ -28,6 +28,15 @@ chrome.runtime.onMessage.addListener(
         number: 1,
         notClosePage: true
       });
+      var count = config.maxProcessTabs - pagesManager.getPagesCount();
+      if (count > 0) {
+        for (var i = 0; i < count; i++) {
+          chrombot.getNewHtml({
+            number: 1,
+            notClosePage: true
+          });
+        }
+      }
     } else if (request.type === 'addHtml') {
       utils.putLog(request);
       chrombot.addHtml(request);
