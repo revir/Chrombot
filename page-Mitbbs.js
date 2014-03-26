@@ -63,6 +63,7 @@ chrombot.startHtml(function(page) {
         var parseArticle = function() {
             var contentSel = 'td.jiawenzhang-type p';
             var contentNode = $(contentSel).first();
+            page.articleInfo.articleType = '文字';
             if (contentNode.has('img').length) {
                 page.articleInfo.articleType = '图片';
                 page.articleInfo.imgUrls = [];
@@ -80,7 +81,7 @@ chrombot.startHtml(function(page) {
             page.articleInfo.content = utils.getElementAttribute(contentSel, null, 0, 'innerText');
             chrombot.writeJSONs({
                 typeId: 'MITBBS_JOKE',
-                expectName:  page.articleInfo.date,
+                expectName:  page.articleInfo.date+'.txt',
                 data: page.articleInfo
             });
         };
