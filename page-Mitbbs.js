@@ -1,10 +1,10 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 4;
-    page.options.pagesOnBoard = 18;
-    page.options.articlesPerFile = 3;
-    page.options.savedir = '[Mitbbs]';
+    page.options.topicsOnPage = 4;    // 表示每个页面获取多少个帖子；
+    page.options.pagesOnBoard = 18;  // 表示板块最多获取多少页;
+    page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
+    page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
     utils.putLog(page, 0);
 
     if (page.pageLayer === 0) {
@@ -80,7 +80,8 @@ chrombot.startHtml(function(page) {
                     page.articleInfo.videoUrls.push(el.src);
                 });
             }
-            page.articleInfo.content = utils.getElementAttribute(contentSel, null, 0, 'innerText');
+            var content = utils.getElementAttribute(contentSel, null, 0, 'innerText');
+            page.articleInfo.content = content.replace(/[\s\S]*发信站.*\n*/, '').replace(/\n+[-][-]\n+[\s\S]*/, '');
             Utils.sendMsg('setArticle', {
                 articlesPerFile: page.options.articlesPerFile,
                 savedir: page.options.savedir,
