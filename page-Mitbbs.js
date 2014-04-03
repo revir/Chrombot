@@ -1,11 +1,11 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 4;    // 表示每个页面获取多少个帖子；
-    page.options.pagesOnBoard = 18;  // 表示板块最多获取多少页;
+    page.options.topicsOnPage = 2;    // 表示每个页面获取多少个帖子；
+    page.options.pagesOnBoard = 1;  // 表示板块最多获取多少页;
     page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
     page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
-    utils.putLog(page, 0);
+    // utils.putLog(page, 0);
 
     if (page.pageLayer === 0) {
         page.boardPageNumber = 1; // it should be;
@@ -62,29 +62,46 @@ chrombot.startHtml(function(page) {
         parseNavOfBoard();
         chrombot.finishHtml();
     } else if (page.pageType === 'topic') {
+        var getNameOfImage = function(url){
+            var g = url.match(/[^\/]+[.][^?\/]{3,5}/g);
+            if(g && g.length){
+                return g[g.length - 1];
+            } else{
+                return '';
+            }
+        };
         var parseArticle = function() {
-            var contentSel = 'td.jiawenzhang-type p';
+            utils.putLog('parseArticle...', 0);
+            var contentSel = 'td.jiawenzhang-type';
             var contentNode = $(contentSel).first();
             page.articleInfo.articleType = '文字';
             if (contentNode.has('img').length) {
                 page.articleInfo.articleType = '图片';
-                page.articleInfo.imgUrls = [];
+                var imgItems = [];
                 $('img', contentNode).each(function(index, el) {
-                    page.articleInfo.imgUrls.push(el.src);
+                    var item = {url: el.src};
+                    item.savedir = (new Date()).toDateString().replace(/ /g, '-');
+                    item.savename = Date.now() + '-' + getNameOfImage(el.src);
+                    item.saveat = 'upyun';
+                    imgItems.push(item);
                 });
+                page.articleInfo.downloadItems = imgItems;
             }
             if (contentNode.has('object embed').length) {
-                page.articleInfo.articleType = '视频';
-                page.articleInfo.videoUrls = [];
-                $('object embed', contentNode).each(function(index, el) {
-                    page.articleInfo.videoUrls.push(el.src);
-                });
+                // page.articleInfo.articleType = '视频';
+                // page.articleInfo.videoUrls = [];
+                // $('object embed', contentNode).each(function(index, el) {
+                //     page.articleInfo.videoUrls.push(el.src);
+                // });
+                chrombot.putLog('Video type article, ignore! title: '+ page.articleInfo.title + 'url: '+page.articleInfo.url);
+                return;
             }
+            utils.putLog(page.articleInfo, 0);
             var content = utils.getElementAttribute(contentSel, null, 0, 'innerText');
             page.articleInfo.content = content.replace(/[\s\S]*发信站.*\n*/, '').replace(/\n+[-][-]\n+[\s\S]*/, '');
             Utils.sendMsg('setArticle', {
-                articlesPerFile: page.options.articlesPerFile,
-                savedir: page.options.savedir,
+                // articlesPerFile: page.options.articlesPerFile,
+                // savedir: page.options.savedir,
                 articleInfo: page.articleInfo
             });
         };

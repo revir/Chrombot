@@ -21,13 +21,21 @@ rpc.onNewHtml = function(data) {
     } else {
         if(!data.htmlInfo.url)
             return false;
-        utils.putLog('get new html: ' + data.htmlInfo.url);
+        // utils.putLog('get new html: ' + data.htmlInfo.url);
         pagesManager.updatePage(data.htmlInfo, data.tabId);
     }
+};
+
+rpc.onDownloadItemsFinished = function(data){
+    if(CoreRobot)
+        CoreRobot.onDownloadItemsFinished(data);
+    else
+        utils.putLog('onDownloadItemsFinished, but CoreRobot is not ready!!!', 3);
 };
 
 rpc.init = function() {
     rpc.serverSocket = io.connect(config.serverIp + ':' + config.serverPort + '/super');
     rpc.serverSocket.on('connected', rpc.onConnected);
     rpc.serverSocket.on('html', rpc.onNewHtml);
+    rpc.serverSocket.on('downloadItemsFinished', rpc.onDownloadItemsFinished);
 };

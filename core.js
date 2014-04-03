@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(
         url: request.url,
         pageLayer: 0
       });
+      
     } else if (request.type === 'startHtml') {
       var pageInfo = pagesManager.getPageInfo(sender.tab.id);
       if (pageInfo) {
@@ -23,6 +24,8 @@ chrome.runtime.onMessage.addListener(
       }
     } else if (request.type === 'finishHtml') {
       pagesManager.deactivePage(sender.tab.id);
+      if(request.noUpdate)
+        return;
       chrombot.getNewHtml({
         tabId: sender.tab.id,
         number: 1,
@@ -38,7 +41,7 @@ chrome.runtime.onMessage.addListener(
         }
       }
     } else if (request.type === 'addHtml') {
-      utils.putLog(request);
+      // utils.putLog(request);
       chrombot.addHtml(request);
     } else if (request.type === 'putLog') {
       utils.putLog(request.text, request.level, request.read);

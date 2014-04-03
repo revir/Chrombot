@@ -12,7 +12,6 @@ chrombot.addFile = function(data){
 
 chrombot.addHtml = function(data){
     if(rpc.serverSocket && rpc.serverSocket.socket.connected){
-
         rpc.serverSocket.emit('addHtml', data);
     } else {
         console.log('[temp] rpc.serverSocket is not ready');
@@ -36,7 +35,8 @@ chrombot.finshTask = function(){
         utils.putLog('Task finished!');
         
         CoreRobot.taskEnd();
-        pagesManager.removeAll();
+        // [temp]
+        // pagesManager.removeAll();
         rpc.serverSocket.emit('taskFinished');
     }
 };
@@ -44,6 +44,14 @@ chrombot.finshTask = function(){
 chrombot.writeJSON = function(obj){
     if(rpc.serverSocket && rpc.serverSocket.socket.connected){
         rpc.serverSocket.emit('writeJSON', obj);
+    } else {
+        console.log('[temp] rpc.serverSocket is not ready');
+    }
+};
+
+chrombot.downloadItems = function(obj){
+    if(rpc.serverSocket && rpc.serverSocket.socket.connected){
+        rpc.serverSocket.emit('downloadItems', obj);
     } else {
         console.log('[temp] rpc.serverSocket is not ready');
     }

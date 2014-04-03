@@ -17,6 +17,9 @@
     }, {
         "js": ["page-Mitbbs.js"],
         "matches": ["*://www.mitbbs.com/*"]
+    }, {
+        "js": ["page-PostArticle.js"],
+        "matches": ["*://kooteq.com/*"]    
     }],
     "options_page": "opt-chrombot.html",
 
