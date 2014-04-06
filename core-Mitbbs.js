@@ -70,7 +70,14 @@ MitbbsBot.prototype.postArticle = function(articleInfo) {
     formData.append('title', articleInfo.title);
     formData.append('content', articleInfo.content);
 
-    formData.append('category', 1);
+    if (articleInfo.articleType === '文字') {
+        formData.append('category', 1);
+    } else if (articleInfo.articleType === '图片') {
+        formData.append('category', 2);
+    } else{
+        utils.putLog('postArticle error!', 3);
+        return;
+    }
     jQuery.ajax({
         url: MitbbsBot.postArticleUrl,
         contentType: false,

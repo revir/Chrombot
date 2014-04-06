@@ -1,7 +1,7 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 2;    // 表示每个页面获取多少个帖子；
+    page.options.topicsOnPage = 4;    // 表示每个页面获取多少个帖子；
     page.options.pagesOnBoard = 1;  // 表示板块最多获取多少页;
     page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
     page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
@@ -17,7 +17,7 @@ chrombot.startHtml(function(page) {
             var titleSel = 'td strong a.news1';
             var authorSel = 'a.news';
             $(titleSel).closest('tr').each(function(index, rowEl) {
-                if (index >= page.options.topicsOnPage) {
+                if (page.options.topicsOnPage>=0 && index >= page.options.topicsOnPage) {
                     return false;
                 }
                 var titleNode = $(titleSel, rowEl).closest('td');
