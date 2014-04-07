@@ -1,6 +1,7 @@
 var chrombot = chrombot || {};
 
 chrombot.putLog = function(text, level, read){
+    Utils.putLog(text, level, read);
     Utils.sendMsg('putLog', {
         text: text,
         level: level,

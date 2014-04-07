@@ -54,7 +54,7 @@ pagesManager.updatePage = function(data, tabId) {
             url: data.url
         });
     } else {
-        Utils.putLog('###UpdatePage error: the updating tabId is not in deactivePages!', 3);
+        chrombot.putLog('###UpdatePage error: the updating tabId is not in deactivePages!', 3);
         return false;
     }
 };

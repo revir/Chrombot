@@ -2,6 +2,13 @@ chrome.tabs.onRemoved.addListener(function(tabId, obj) {
   pagesManager.removePage(tabId);
 });
 
+chrome.runtime.onSuspend.addListener(function(){
+  chrombot.putLog('onSuspend event!');
+  if(rpc && rpc.serverSocket && rpc.serverSocket.socket.connected){
+    rpc.serverSocket.disconnect();
+  }
+});
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.type === 'startTask') {
@@ -44,7 +51,7 @@ chrome.runtime.onMessage.addListener(
       // utils.putLog(request);
       chrombot.addHtml(request);
     } else if (request.type === 'putLog') {
-      utils.putLog(request.text, request.level, request.read);
+      chrombot.putLog(request.text, request.level, request.read);
     }
   }
 );

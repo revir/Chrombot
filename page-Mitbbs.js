@@ -1,8 +1,8 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = 4;    // 表示每个页面获取多少个帖子；
-    page.options.pagesOnBoard = 1;  // 表示板块最多获取多少页;
+    page.options.topicsOnPage = -1;    // 表示每个页面获取多少个帖子；
+    page.options.pagesOnBoard = -1;  // 表示板块最多获取多少页;
     page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
     page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
     // utils.putLog(page, 0);
@@ -46,7 +46,7 @@ chrombot.startHtml(function(page) {
             });
         };
         var parseNavOfBoard = function() {
-            if (page.boardPageNumber && page.boardPageNumber >= page.options.pagesOnBoard)
+            if (page.boardPageNumber && page.pagesOnBoard >= 0 && page.boardPageNumber >= page.options.pagesOnBoard)
                 return false;
 
             var nextSel = 'a.news:contains("下页")';
@@ -54,7 +54,7 @@ chrombot.startHtml(function(page) {
             info.url = utils.getElementAttribute(nextSel, null, 'last', 'href');
             info.pageType = 'board';
             info.boardPageNumber = page.boardPageNumber ? page.boardPageNumber + 1 : 2;
-            utils.putLog(info, 0);
+            chrombot.putLog(info, 0);
             chrombot.addHtml(page, info);
         };
 

@@ -1,13 +1,13 @@
 var rpc = rpc || {};
 rpc.onConnected = function(data) {
-    utils.putLog('connected');
+    chrombot.putLog('connected');
 };
 
 rpc.onNewHtml = function(data) {
     chrombot.htmlRequests -= 1;
     if (!data.htmlInfo) { // no html coming, may means task is finished!
-        utils.putLog('There is not new Html on the back!');
-        if(pagesManager.hasNoActivePages() && chrombot.htmlRequests === 0){
+        chrombot.putLog('There is not new Html on the back!', 0);
+        if(pagesManager.hasNoActivePages() && chrombot.htmlRequests <= 0){
             chrombot.finshTask();
         } else {
             utils.delayedExecute(1000, function(){
@@ -30,7 +30,7 @@ rpc.onDownloadItemsFinished = function(data){
     if(CoreRobot)
         CoreRobot.onDownloadItemsFinished(data);
     else
-        utils.putLog('onDownloadItemsFinished, but CoreRobot is not ready!!!', 3);
+        chrombot.putLog('onDownloadItemsFinished, but CoreRobot is not ready!!!', 3);
 };
 
 rpc.init = function() {

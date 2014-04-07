@@ -27,7 +27,7 @@ MitbbsBot.prototype.taskEnd = function() {
 //     if (!MitbbsBot.__articles.length || !MitbbsBot.__savedir) {
 //         return false;
 //     }
-//     utils.putLog('writeArticles...', 0);
+//     chrombot.putLog('writeArticles...', 0);
 //     chrombot.writeJSON({
 //         savename: MitbbsBot.__articles[0].date + '.txt',
 //         savedir: MitbbsBot.__savedir,
@@ -43,10 +43,10 @@ MitbbsBot.prototype._listener = function(request, sender, sendResponse) {
         var articleInfo = request.articleInfo;
 
         if (articleInfo.articleType === '文字') {
-            utils.putLog('Get a 文字 article, title: ' + articleInfo.title + '  url: ' + articleInfo.url);
+            chrombot.putLog('Get a 文字 article, title: ' + articleInfo.title + '  url: ' + articleInfo.url);
             MitbbsBot.prototype.postArticle(request.articleInfo);
         } else if (articleInfo.articleType === '图片') {
-            utils.putLog('Get a 图片 article, title: ' + articleInfo.title + '  url: ' + articleInfo.url);
+            chrombot.putLog('Get a 图片 article, title: ' + articleInfo.title + '  url: ' + articleInfo.url);
             chrombot.downloadItems(articleInfo);
         }
 
@@ -55,13 +55,13 @@ MitbbsBot.prototype._listener = function(request, sender, sendResponse) {
         // }
     } else if (request.type === 'saveTooken') {
         MitbbsBot.__tooken = request.tooken;
-        utils.putLog('Get the tooken of kooteq.com:  ' + MitbbsBot.__tooken);
+        chrombot.putLog('Get the tooken of kooteq.com:  ' + MitbbsBot.__tooken);
     }
 };
 
 MitbbsBot.prototype.postArticle = function(articleInfo) {
     if (!MitbbsBot.__tooken) {
-        utils.putLog('postArticle, but havenot get the tooken yet, push to the cache.', 2);
+        chrombot.putLog('postArticle, but havenot get the tooken yet, push to the cache.', 2);
         MitbbsBot.__articles.push(articleInfo);
         return;
     }
@@ -75,7 +75,7 @@ MitbbsBot.prototype.postArticle = function(articleInfo) {
     } else if (articleInfo.articleType === '图片') {
         formData.append('category', 2);
     } else{
-        utils.putLog('postArticle error!', 3);
+        chrombot.putLog('postArticle error!', 3);
         return;
     }
     jQuery.ajax({
@@ -93,11 +93,11 @@ MitbbsBot.prototype.onDownloadItemsFinished = function(articleInfo) {
         if (item.saveurl) {
             var mdStr = '![' + item.savename + ']' + '(' + item.saveurl + ')';
             content += '\n' + mdStr;
-            utils.putLog('onDownloadItemsFinished item: ' + mdStr, 0);
+            chrombot.putLog('onDownloadItemsFinished item: ' + mdStr, 0);
         }
     });
     articleInfo.content = content;
     // [temp]
-    utils.putLog(articleInfo, 0);
+    chrombot.putLog(articleInfo, 0);
     MitbbsBot.prototype.postArticle(articleInfo);
 };
