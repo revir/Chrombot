@@ -5,6 +5,17 @@ chrombot.startHtml(function(page) {
     page.options.pagesOnBoard = -1;  // 表示板块最多获取多少页;
     page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
     page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
+
+    page.options.blockWords = [
+        "？",
+        "?",
+        "本版",
+        "Joke版",
+        "转载",
+        "Re:",
+        "RE:",
+        "Rt:"
+    ];
     // utils.putLog(page, 0);
 
     if (page.pageLayer === 0) {
@@ -16,6 +27,19 @@ chrombot.startHtml(function(page) {
         var parseTopicsOfBoard = function() {
             var titleSel = 'td strong a.news1';
             var authorSel = 'a.news';
+
+            var checkTitleInBlockWords = function(title){
+                title = title || '';
+                var blocked = false;
+                $.each(page.options.blockWords, function(index, val) {
+                    if(title.indexOf(val) !== -1){
+                        blocked = true;
+                        return false;
+                    }
+                });
+                return blocked;
+            };
+
             $(titleSel).closest('tr').each(function(index, rowEl) {
                 if (page.options.topicsOnPage>=0 && index >= page.options.topicsOnPage) {
                     return false;
@@ -29,6 +53,10 @@ chrombot.startHtml(function(page) {
                 info.articleInfo = {};
                 info.articleInfo.title = utils.getElementAttribute(titleSel, rowEl, 0, 'innerText').replace(/^● ?/, '');
                 info.articleInfo.url = utils.getElementAttribute(titleSel, rowEl, 0, 'href');
+                if(checkTitleInBlockWords(info.articleInfo.title)){
+                    chrombot.putLog('Filtered article, title: '+info.articleInfo.title + '  url: '+info.articleInfo.url);
+                    return;
+                }
                 info.url = info.articleInfo.url;
 
                 var nums = Utils.getNumbers(dataNode.text(), /\d+/g);
