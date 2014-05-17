@@ -1,8 +1,8 @@
 chrombot.startHtml(function(page) {
     //[temp]
     page.options = {};
-    page.options.topicsOnPage = -1;    // 表示每个页面获取多少个帖子；
-    page.options.pagesOnBoard = -1;  // 表示板块最多获取多少页;
+    page.options.topicsOnPage = -1; // 表示每个页面获取多少个帖子；
+    page.options.pagesOnBoard = -1; // 表示板块最多获取多少页;
     page.options.articlesPerFile = 3; // 表示每多少篇文章保存一个 JSON 文件；
     page.options.savedir = '[Mitbbs]'; // 表示文章保存路径;
 
@@ -28,11 +28,11 @@ chrombot.startHtml(function(page) {
             var titleSel = 'td strong a.news1';
             var authorSel = 'a.news';
 
-            var checkTitleInBlockWords = function(title){
+            var checkTitleInBlockWords = function(title) {
                 title = title || '';
                 var blocked = false;
                 $.each(page.options.blockWords, function(index, val) {
-                    if(title.indexOf(val) !== -1){
+                    if (title.indexOf(val) !== -1) {
                         blocked = true;
                         return false;
                     }
@@ -41,7 +41,7 @@ chrombot.startHtml(function(page) {
             };
 
             $(titleSel).closest('tr').each(function(index, rowEl) {
-                if (page.options.topicsOnPage>=0 && index >= page.options.topicsOnPage) {
+                if (page.options.topicsOnPage >= 0 && index >= page.options.topicsOnPage) {
                     return false;
                 }
                 var titleNode = $(titleSel, rowEl).closest('td');
@@ -53,8 +53,8 @@ chrombot.startHtml(function(page) {
                 info.articleInfo = {};
                 info.articleInfo.title = utils.getElementAttribute(titleSel, rowEl, 0, 'innerText').replace(/^● ?/, '');
                 info.articleInfo.url = utils.getElementAttribute(titleSel, rowEl, 0, 'href');
-                if(checkTitleInBlockWords(info.articleInfo.title)){
-                    chrombot.putLog('Filtered article, title: '+info.articleInfo.title + '  url: '+info.articleInfo.url);
+                if (checkTitleInBlockWords(info.articleInfo.title)) {
+                    chrombot.putLog('Filtered article, title: ' + info.articleInfo.title + '  url: ' + info.articleInfo.url);
                     return;
                 }
                 info.url = info.articleInfo.url;
@@ -90,11 +90,11 @@ chrombot.startHtml(function(page) {
         parseNavOfBoard();
         chrombot.finishHtml();
     } else if (page.pageType === 'topic') {
-        var getNameOfImage = function(url){
+        var getNameOfImage = function(url) {
             var g = url.match(/[^\/]+[.][^?\/]{3,5}/g);
-            if(g && g.length){
+            if (g && g.length) {
                 return g[g.length - 1];
-            } else{
+            } else {
                 return '';
             }
         };
@@ -107,7 +107,9 @@ chrombot.startHtml(function(page) {
                 page.articleInfo.articleType = '图片';
                 var imgItems = [];
                 $('img', contentNode).each(function(index, el) {
-                    var item = {url: el.src};
+                    var item = {
+                        url: el.src
+                    };
                     item.savedir = (new Date()).toDateString().replace(/ /g, '-');
                     item.savename = Date.now() + '-' + getNameOfImage(el.src);
                     item.saveat = 'upyun';
@@ -121,7 +123,7 @@ chrombot.startHtml(function(page) {
                 // $('object embed', contentNode).each(function(index, el) {
                 //     page.articleInfo.videoUrls.push(el.src);
                 // });
-                chrombot.putLog('Video type article, ignore! title: '+ page.articleInfo.title + 'url: '+page.articleInfo.url);
+                chrombot.putLog('Video type article, ignore! title: ' + page.articleInfo.title + 'url: ' + page.articleInfo.url);
                 return;
             }
             utils.putLog(page.articleInfo, 0);
@@ -133,7 +135,7 @@ chrombot.startHtml(function(page) {
                 articleInfo: page.articleInfo
             });
         };
-        
+
         parseArticle();
 
         chrombot.finishHtml();

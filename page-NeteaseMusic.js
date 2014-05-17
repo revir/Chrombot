@@ -1,51 +1,47 @@
 chrombot.startHtml(function(page) {
     chrombot.putLog('page: ' + JSON.stringify(page), 0);
     var frameSelector = '#g_iframe';
+    var songIndex = 0;
+    var songList = jQuery();
+    var authorName = '',
+        title = '';
 
-    // chrombot.fopen({
-    //     path: '歌单.csv',
-    //     mode: 'a',
-    //     header: '歌曲,作者,专辑,时长\n'
-    // });
-    //
-    var parseSong = function(index, node, albumName, onFinish) {
-        var playBtn = jQuery('.ply', node),
-            titleNode = jQuery('.txt', node),
-            timeNode = jQuery('.s-fc3', node)[0],
-            AuthorNode = jQuery('.s-fc3', node)[1],
-            AlbumNode = jQuery('.s-fc3', node)[2];
-
-        if (!playBtn.length || !titleNode.length) {
-            chrombot.putLog('获取歌曲信息失败，跳过本首歌', 3);
-            onFinish();
-            return;
+    var parseSong = function(node, author){
+        var playBtn = jQuery('.ply', node);
+        var name = utils.getElementAttribute('.txt a', node, 0, 'innerText').replace(/[,\r\n\/\\]/g, '');
+        var album = utils.getElementAttribute('.text a.s-fc3', node, 'last', 'innerText').replace(/[,\r\n\/\\]/g, '');
+        songIndex += 1;
+        if(!author){
+            author = utils.getElementAttribute('.text a.s-fc3', node, 0, 'innerText');
         }
+        if(!playBtn.length || !name || !album || !author || !title){
+            chrombot.putLog('获取歌曲信息失败，跳过本首歌', 3);
+            parseList();
+        } else {
+            playBtn[0].click();
+            chrombot.putLog('下载歌曲：' + author + ' - ' + name + '  《' + album + '》');
+            chrome.runtime.sendMessage({
+                type: 'getMp3',
+                savename: author + '-' + name + '.mp3',
+                savedir: '~/MUSIC/'+title
+            }, function(response) {
+                if (response.failed) {
+                    chrombot.putLog('无法下载此首歌曲!', 3);
+                }
+                parseList();
+            });
+        }
+    };
 
-        playBtn[0].click();
-        var name = titleNode.text() + '.mp3';
-        name = name.replace(/[,\r\n\/\\]/g, '');
-
-        var time = timeNode.innerText;
-        var author = AuthorNode.innerText;
-        var album = AlbumNode.innerText;
-
-        chrombot.putLog('下载歌曲：' + author + ' - ' + name + '  《' + album + '》');
-        // chrombot.fwrite({
-        //     path: '歌单.csv',
-        //     text: name + ',' + author + ',' + album + ',' + time + '\n'
-        // });
-
-        chrome.runtime.sendMessage({
-            type: 'getMp3',
-            savename: author + '-' + name,
-            savedir: '~/'+albumName
-
-        }, function(response) {
-            if (response.failed) {
-                chrombot.putLog('无法下载此首歌曲!', 3);
-            }
-            onFinish();
-        });
+    var parseList = function(){
+        if(songIndex === 0){
+            chrombot.putLog('共发现 ' + songList.length + ' 首歌曲');
+        }
+        if(songIndex >= songList.length){
+            chrombot.putLog('所有歌曲都已解析完成！');
+        } else {
+            parseSong(songList.get(songIndex), authorName);
+        }
     };
 
     if (page.pageLayer === 0) { //首页
@@ -53,35 +49,25 @@ chrombot.startHtml(function(page) {
             if (!success) {
                 alert('首页超时！');
             }
+            
             var fm = jQuery(frameSelector)[0].contentDocument;
-            var songList = jQuery('.m-table .ztag', fm);
-            chrombot.putLog('共发现 ' + songList.length + ' 首歌曲');
+            songList = jQuery('.m-table .ztag', fm);
 
-            var albumName = jQuery('title').text();
-            albumName = albumName.substring(0, albumName.lastIndexOf('-'));
-            albumName.trim();
-            chrombot.putLog('找到专辑名:' + albumName);
-            //chrome.runtime.sendMessage({
-                //type: 'getAlbumName_dir',
-                //savename:albumName
-            //}, function(response) {
-                //if (response.failed) {
-                    //chrombot.putLog('无法创建专辑目录');
-                //}
-            //});
+            title = jQuery('title').text();
+            title = title.substring(0, title.lastIndexOf('-'));
+            title.trim();
+            chrombot.putLog('找到专辑名:' + title);
 
-            //scheduled to request mp3
-            var sIndex = 0;
-            var funcDo = function() {
-                if (sIndex >= songList.length) {
-                    chrombot.finishHtml();
-                    return;
-                }
-                parseSong(sIndex, songList[sIndex], albumName, funcDo);
-                sIndex += 1;
-            };
+            var authorNode = jQuery('#artist-name', fm);
+            if(authorNode.length){
+                chrombot.putLog('这是一张专辑.');
+                authorName = authorNode.text();
+            } else {
+                chrombot.putLog('这是一张歌单.');
+                authorName = '';
+            }
 
-            funcDo();
+            parseList();
         });
     }
 });
